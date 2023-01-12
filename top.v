@@ -157,7 +157,7 @@ module Top(
     wire [1:0] game_status;
     wire [15:0] state_score;
     State chess_board (
-        .clk(clk),
+        .clk(clk_25MHZ),
         .rst(dbop_rst),
         .write(dbop_enter),
         .addr(addr0),
