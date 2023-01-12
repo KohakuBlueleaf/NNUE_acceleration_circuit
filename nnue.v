@@ -28,40 +28,41 @@ module NNUE(
   output finish,
   output [15:0] out
 );
+  `include "nnue.vh"
   //Layer1 - accumulator
   wire fin1;
-  wire [0:128*8-1] out1_1, out1_2;
-  wire [0:256*8-1] out1 = player ? {out1_2, out1_1} : {out1_1, out1_2};
-  Accumulator #(.OUTPUT_FEATURES(128)) 
+  wire [0:Layer1*8-1] out1_1, out1_2;
+  wire [0:Layer1*2*8-1] out1 = player ? {out1_2, out1_1} : {out1_1, out1_2};
+  Accumulator #(.OUTPUT_FEATURES(Layer1)) 
     acc(clk, rst_n, row, add, player, trigger, fin1, out1_1, out1_2);
   
   
   //Layer2 - 256 -> 16
   wire fin2;
   wire [7:0] now_seg2;
-  wire [0:16*16*8+7] w2;
+  wire [0:(MAX_ROW)*16*8+7] w2;
   wire [0:16*16+7] b2;
   wire [0:16*16-1] out2;
   wire [0:16*8-1] out2_clipped;
   
   blk_mem_gen_l2_w weight_bram_l2(.clka(clk), .wea(0), .addra(now_seg2), .dina(0), .douta(w2)); 
   blk_mem_gen_l2_b bias_bram_l2(.clka(clk), .wea(0), .addra(0), .dina(0), .douta(b2)); 
-  Linear #(.IN(256), .OUT(16)) layer2(clk, rst_n, fin1, out1, now_seg2, w2, b2, fin2, out2);
-  ScaledClippedRelu #(.LEN(16)) ClipRelu2(out2, out2_clipped);
+  Linear #(.IN(Layer1*2), .OUT(Layer2), .MAX(MAX_ROW)) layer2(clk, rst_n, fin1, out1, now_seg2, w2, b2, fin2, out2);
+  ScaledClippedRelu #(.LEN(Layer2)) ClipRelu2(out2, out2_clipped);
   
   
   //Layer3 - 16 -> 16
   wire fin3;
   wire [7:0] now_seg3;
-  wire [0:16*16*8+7] w3;
+  wire [0:(MAX_ROW)*16*8+7] w3;
   wire [0:16*16+7] b3;
   wire [0:16*16-1] out3;
   wire [0:16*8-1] out3_clipped;
   
   blk_mem_gen_l3_w weight_bram_l3(.clka(clk), .wea(0), .addra(now_seg3), .dina(0), .douta(w3)); 
   blk_mem_gen_l3_b bias_bram_l3(.clka(clk), .wea(0), .addra(0), .dina(0), .douta(b3)); 
-  Linear #(.IN(16), .OUT(16)) layer3(clk, rst_n, fin2, out2_clipped, now_seg3, w3, b3, fin3, out3);
-  ScaledClippedRelu #(.LEN(16)) ClipRelu3(out3, out3_clipped);
+  Linear #(.IN(Layer2), .OUT(Layer3), .MAX(MAX_ROW)) layer3(clk, rst_n, fin2, out2_clipped, now_seg3, w3, b3, fin3, out3);
+  ScaledClippedRelu #(.LEN(Layer3)) ClipRelu3(out3, out3_clipped);
   
   
   //Layer4 - 16 -> 1
@@ -71,5 +72,5 @@ module NNUE(
   
   blk_mem_gen_l4_w weight_bram_l4(.clka(clk), .wea(0), .addra(now_seg4), .dina(0), .douta(w4)); 
   blk_mem_gen_l4_b bias_bram_l4(.clka(clk), .wea(0), .addra(0), .dina(0), .douta(b4)); 
-  Linear #(.IN(16), .OUT(1)) layer4(clk, rst_n, fin3, out3_clipped, now_seg4, w4, b4, finish, out);
+  Linear #(.IN(Layer3), .OUT(1)) layer4(clk, rst_n, fin3, out3_clipped, now_seg4, w4, b4, finish, out);
 endmodule

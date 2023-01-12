@@ -12,7 +12,7 @@ module nnue_t;
   initial begin
     clk = 1'b0; rst_n = 1'b0; player=1'd1; add = 1'b1; row = 7'd0; trigger=1'b0; #2
     rst_n = 1'b1; #10
-    row = 7'd0; trigger = 1'b1; #2 trigger=1'b0; #150;
+    row = 7'd0; trigger = 1'b1; #2 trigger=1'b0; #2000;
     #2 $finish;
   end
 endmodule

@@ -131,11 +131,12 @@ module Top(
     // debounce onepulse signals
     wire dbop_up, dbop_down, dbop_left, dbop_right, dbop_enter, dbop_rst;
     DBOP #(.N(10)) dbop0 (.clk(clk_25MHZ), .in(rst), .out(dbop_rst));
-    DebounceOnePulsePeriod dbop1 (.clk(clk_25MHZ), .rst(dbop_rst), .in(enter), .out(dbop_enter));
-    DebounceOnePulsePeriod dbop2 (.clk(clk_25MHZ), .rst(dbop_rst), .in(up),    .out(dbop_up));
-    DebounceOnePulsePeriod dbop3 (.clk(clk_25MHZ), .rst(dbop_rst), .in(down),  .out(dbop_down));
-    DebounceOnePulsePeriod dbop4 (.clk(clk_25MHZ), .rst(dbop_rst), .in(left),  .out(dbop_left));
-    DebounceOnePulsePeriod dbop5 (.clk(clk_25MHZ), .rst(dbop_rst), .in(right), .out(dbop_right));
+    DebounceOnePulsePeriod #(.BUF_LEN(16), .MIN_PERIOD(4096)) 
+        dbop1 (.clk(clk_25MHZ), .rst(dbop_rst), .in(enter), .out(dbop_enter)),
+        dbop2 (.clk(clk_25MHZ), .rst(dbop_rst), .in(up),    .out(dbop_up)),
+        dbop3 (.clk(clk_25MHZ), .rst(dbop_rst), .in(down),  .out(dbop_down)),
+        dbop4 (.clk(clk_25MHZ), .rst(dbop_rst), .in(left),  .out(dbop_left)),
+        dbop5 (.clk(clk_25MHZ), .rst(dbop_rst), .in(right), .out(dbop_right));
 
     // Process inputs
     wire player;
@@ -171,7 +172,7 @@ module Top(
     DisplayScore display_score(clk, dbop_rst, state_score, an, seg7);
 
     // Display with vga
-    DisplayVGA SHOW (
+    DisplayVGA show (
         .clk(clk_25MHZ),
         .rst(dbop_rst),
         .player(player),
