@@ -1,0 +1,4 @@
+; shape: 1 depth x 264 width
+memory_initialization_radix = 16;
+memory_initialization_vector = 
+01ff69f5da02e4ffc903ddff2f0070ff7301e309faff6cff36fff0ffe5ff6eff64;
