@@ -127,7 +127,7 @@ module DisplayVGA(
     parameter SCORE_V = BOARD_V + BOARD_WIDTH + 20;
     parameter SCORE_H_LEN = BOARD_WIDTH;
     parameter SCORE_V_LEN = 30;
-    parameter SCORE_MAX = 6000;
+    parameter SCORE_MAX = 10000;
 
     // Usedcolor update
     wire [3:0] block_v, block_h, chess_h, chess_v;
