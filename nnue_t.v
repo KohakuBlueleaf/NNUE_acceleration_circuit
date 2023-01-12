@@ -1,4 +1,4 @@
-module test;
+module nnue_t;
   reg clk, rst_n, trigger, add, player;
   reg [6:0] row;
   

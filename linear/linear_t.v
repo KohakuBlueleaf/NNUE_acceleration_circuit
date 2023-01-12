@@ -2,19 +2,23 @@ module linear_t;
   parameter N = 256;
   parameter P = 16;
   reg clk, rst_n, trigger, add;
-  reg [6:0] row;
   
   parameter cyc = 2;
   always#(cyc/2)clk = !clk;
-  
-  wire finish;
   
   reg signed [7:0] x [0:N-1];
   reg signed [15:0] out_arr [0:P-1];
   
   reg [0:N*8-1] x_temp;
-  wire [0:P*16-1] out;
-  Linear #(.IN(N), .OUT(P)) matmul(clk, rst_n, trigger, x_temp, finish, out);
+  wire fin;
+  wire [7:0] now_seg;
+  wire [0:16*16*8+7] w;
+  wire [0:16*16+7] b;
+  wire [0:16*16-1] out;
+  
+  blk_mem_gen_l3_w weight_bram_l3(.clka(clk), .wea(0), .addra(now_seg), .dina(0), .douta(w)); 
+  blk_mem_gen_l3_b bias_bram_l3(.clka(clk), .wea(0), .addra(0), .dina(0), .douta(b)); 
+  Linear #(.IN(16), .OUT(16)) layer3(clk, rst_n, trigger, x_temp, now_seg, w, b, fin, out);
   
   //port mapping
   always @(*) begin
