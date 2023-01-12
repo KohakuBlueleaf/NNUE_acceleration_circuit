@@ -84,6 +84,10 @@ module DisplayVGA(
     output hsync, vsync
 );  
     // RGB color assignment
+    parameter BG = 12'hddd;
+    parameter BOARD = 12'hfcd;
+    parameter GRID = 12'h8a8;
+    parameter SCORE = 12'h659;
     parameter BLACK = 12'h000;
     parameter WHITE = 12'hFFF;
     parameter PURPLE = 12'h409;
@@ -178,28 +182,28 @@ module DisplayVGA(
                         case({board[blockaddr0], board[blockaddr1], win_board[blockaddr0]})
                             3'd011: next_usedcolor = BLACK;
                             3'd101: next_usedcolor = WHITE;
-                            default: next_usedcolor = BLUE;
+                            default: next_usedcolor = BOARD;
                         endcase
                     end else begin
                         case({board[blockaddr0], board[blockaddr1]}) // First hand will be white
                             2'd01: next_usedcolor = BLACK;
                             2'd10: next_usedcolor = WHITE;
-                            default: next_usedcolor = BLUE;
+                            default: next_usedcolor = BOARD;
                         endcase       
                     end             
                 end else
-                    next_usedcolor = BLUE;
+                    next_usedcolor = BOARD;
             end else begin
-                next_usedcolor = draw_rec ? (player ? BLACK : WHITE) : PURPLE;
+                next_usedcolor = draw_rec ? (player ? BLACK : WHITE) : GRID;
             end
         end else if (in_score) begin
             if (in_score_mid) begin
                 next_usedcolor = (h_cnt <= score_div_pt) ? WHITE : BLACK;
             end else begin
-                next_usedcolor = GRAY;
+                next_usedcolor = SCORE;
             end
         end else begin
-            next_usedcolor = WHITE;
+            next_usedcolor = BG;
         end
     end
 endmodule
