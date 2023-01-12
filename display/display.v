@@ -180,14 +180,14 @@ module DisplayVGA(
                 if (in_chess) begin 
                     if (game_status) begin
                         case({board[blockaddr0], board[blockaddr1], win_board[blockaddr0]})
-                            3'd011: next_usedcolor = BLACK;
-                            3'd101: next_usedcolor = WHITE;
+                            3'b011: next_usedcolor = BLACK;
+                            3'b101: next_usedcolor = WHITE;
                             default: next_usedcolor = BOARD;
                         endcase
                     end else begin
                         case({board[blockaddr0], board[blockaddr1]}) // First hand will be white
-                            2'd01: next_usedcolor = BLACK;
-                            2'd10: next_usedcolor = WHITE;
+                            2'b01: next_usedcolor = BLACK;
+                            2'b10: next_usedcolor = WHITE;
                             default: next_usedcolor = BOARD;
                         endcase       
                     end             
