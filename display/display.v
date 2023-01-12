@@ -84,17 +84,13 @@ module DisplayVGA(
     output hsync, vsync
 );  
     // RGB color assignment
-    parameter BG = 12'hddd;
-    parameter BOARD = 12'hfcd;
-    parameter GRID = 12'h8a8;
+    parameter BG = 12'hCCC;
+    parameter BOARD = 12'hEBC;
+    parameter GRID = 12'h7A7;
     parameter SCORE = 12'h659;
     parameter BLACK = 12'h000;
     parameter WHITE = 12'hFFF;
-    parameter PURPLE = 12'h409;
-    parameter RED   = 12'hD22;
-    parameter GRAY  = 12'h555;
-    parameter BLUE  = 12'h58A;
-
+    
     reg [11:0] usedcolor, next_usedcolor;
     assign {vgaRed, vgaGreen, vgaBlue} = (valid) ? usedcolor : BLACK;
 
