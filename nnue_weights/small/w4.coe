@@ -1,4 +1,0 @@
-; shape: 1 depth x 136 width
-memory_initialization_radix = 16;
-memory_initialization_vector = 
-0100e2000000000025ee004e00e5dbf600;

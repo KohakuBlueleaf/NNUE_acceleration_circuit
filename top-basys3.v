@@ -1,3 +1,5 @@
+//For basys3, we remove the 7seg display part since basys3 has only 4 digit and we need 7 digit
+
 module TopBasys3(
     input clk, rst, up, down, left, right, enter,
     output [3:0] vgaRed, vgaBlue, vgaGreen,
