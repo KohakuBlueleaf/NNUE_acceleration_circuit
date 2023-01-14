@@ -163,11 +163,12 @@ module DisplayVGA(
     assign clipped          = (abs_score > SCORE_MAX) ? SCORE_MAX : abs_score;
     assign ratio            = SCORE_MAX * 2 / SCORE_H_LEN;
     assign shift            = (clipped / ratio > SCORE_H_LEN / 2) ? SCORE_H_LEN / 2 : clipped / ratio; // abs_score
-    assign score_div_pt     = (game_status == 2'b01) ? SCORE_H + SCORE_H_LEN - PADDING :(
-                                (game_status == 2'b10) ? SCORE_H :(
-                                ~(score[15] ^ player) ? SCORE_H + SCORE_H_LEN / 2 + shift : SCORE_H + SCORE_H_LEN / 2 - shift
-                                )
-                            ); 
+    assign score_div_pt     = SCORE_H + 
+	    		      (game_status == 2'b01) ? SCORE_H_LEN :(
+			      (game_status == 2'b10) ? PADDING :(
+                               	  ~(score[15] ^ player) ? SCORE_H_LEN / 2 + shift : SCORE_H_LEN / 2 - shift
+                              	)
+                              ); 
 
     // next_usedcolor assignment
     always @(*) begin
