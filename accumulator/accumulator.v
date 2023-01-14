@@ -25,8 +25,8 @@ module Accumulator#(
   wire [0:OUTPUT_FEATURES*16-1] w_read_temp;
   reg signed [15:0] weight [0:OUTPUT_FEATURES-1];
   
-  reg signed [7:0] o_temp0 [0:OUTPUT_FEATURES-1];
-  reg signed [7:0] o_temp1 [0:OUTPUT_FEATURES-1];
+  reg signed [15:0] o_temp0 [0:OUTPUT_FEATURES-1];
+  reg signed [15:0] o_temp1 [0:OUTPUT_FEATURES-1];
   
   blk_mem_gen_accumulator_w weight_bram(
     .clka(clk),
